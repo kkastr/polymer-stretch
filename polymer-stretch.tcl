@@ -54,7 +54,7 @@ set fixed_N [expr $N/2]
 set equil_time [expr 10.0 * $N]
 set t_pore 1
 set z_line [expr $cz - $t_pore/2]
-set force [expr -1.13]
+set force [expr -4.3]
 set lsens 1.5
 set lcav 19.5 
 set rcav 99.5
