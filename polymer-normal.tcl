@@ -77,9 +77,9 @@ part [expr $N+4] pos $cx $cy [expr $cz + 2.0 * ($lcav + 0.5) + $lsens+0.5 + $lfi
 
 constraint pore center [expr $cx] [expr $cy] [expr $cz] axis 0 0 1 radius $rsens length $rsens type 1
 constraint pore center [expr $cx] [expr $cy] [expr $cz + $lcav+0.5 + $lsens+0.5] axis 0 0 1 radius $rcav length $lcav type 1
-constraint pore center [expr $cx] [expr $cy] [expr $cz + 2.0 * ($lcav + 0.5) + $lsens+0.5 + $lfilt+0.5] axis 0 0 1 radius $rfilt length $lfilt type 1
-constraint pore center [expr $cx] [expr $cy] [expr $cz + $lcav+0.5 + $lsens+0.5 + $mporezfilt] axis 0 0 1 radius $rcav length $lcav type 1
-constraint pore center [expr $cx] [expr $cy] [expr $cz + 2.0 * ($lcav + 0.5) + $lsens+0.5 + $lfilt+0.5 + $mporezfilt] axis 0 0 1 radius $rsens length $lsens type 1
+# constraint pore center [expr $cx] [expr $cy] [expr $cz + 2.0 * ($lcav + 0.5) + $lsens+0.5 + $lfilt+0.5] axis 0 0 1 radius $rfilt length $lfilt type 1
+# constraint pore center [expr $cx] [expr $cy] [expr $cz + $lcav+0.5 + $lsens+0.5 + $mporezfilt] axis 0 0 1 radius $rcav length $lcav type 1
+# constraint pore center [expr $cx] [expr $cy] [expr $cz + 2.0 * ($lcav + 0.5) + $lsens+0.5 + $lfilt+0.5 + $mporezfilt] axis 0 0 1 radius $rsens length $lsens type 1
 
 
 
