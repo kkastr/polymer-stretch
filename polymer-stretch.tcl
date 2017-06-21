@@ -112,7 +112,7 @@ if { $vis == 1 } {
 
 
 
-part 0 fix
+
 
 set flag 0
 set t 0	
@@ -122,22 +122,29 @@ set success 0
 set trans_flag 0
 
 
-
+set position_flag 0
 while {$flag == 0} {
 	#puts "debug while"
-	for { set i 0 } { $i < $N } { incr i } {
-		# set x [expr $cx]
-		# set y [expr $cy]
-		# set z [expr $cz  + 0.97*$i]
+	part 0 fix
+	if {$position_flag == 1} {
+		puts "here"
+		for { set i 0 } { $i < $N } { incr i } {
+			set x [expr $cx]
+			set y [expr $cy]
+			set z [expr $cz  + 0.97*$i]
 
-	# 	set x [expr $cx - $N/2 + $i]
-	# 	set y [expr $cy]
-	# 	set z [expr $cz + 15]
-	# 	part $i pos $x $y $z type 0 
+			# set x [expr $cx - $N/2 + $i]
+			# set y [expr $cy]
+			# set z [expr $cz + 15]
+			part $i pos $x $y $z ext_force 0 0 0
+		}
+		set position_flag 0
 	}
 	# integrate 100
 	# imd positions
 	#part $fixed_N fix
+	
+
 
 	thermostat langevin $temp $gamma_equilibration
 	for {set i 0} {$i < $equil_time} {incr i} {
@@ -165,7 +172,6 @@ while {$flag == 0} {
 	}
 	thermostat langevin $temp $gamma
 
-	part 0 fix
 
 	#part $fixed_N unfix
 
@@ -247,7 +253,7 @@ while {$flag == 0} {
 		}
 
 		if {($z_min > [lindex [part [expr $N+4] print pos] 2]) || ($z_max < $z_line)} {
-			puts "zmin > ztop"
+			puts "translocating"
 			set t_last_thread $t
 			puts $t_last_thread
 			set t_trans [expr $t_last_thread - $t_thread]
@@ -256,6 +262,7 @@ while {$flag == 0} {
 			close $trans_time
 			set n [expr $n + 1.0]
 			set trans_flag 0
+			set position_flag 1
 			break
 		}
 
@@ -275,6 +282,7 @@ while {$flag == 0} {
 		# }
 		if {$t_trans != 0} {
 			set t_trans 0 
+			
 		}
 		integrate 100
 		imd positions
