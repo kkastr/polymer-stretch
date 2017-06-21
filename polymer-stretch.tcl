@@ -219,7 +219,7 @@ while {$flag == 0} {
 		set z_max [::tcl::mathfunc::max {*}$z_list]
 
 
-		if {$z_min < $z_line} {
+		if {($z_min < $z_line) || ($z_min > $z_top)} {
 			
 			if {$trans_flag == 0 } {
 				#puts "inside translocation if"
@@ -233,18 +233,18 @@ while {$flag == 0} {
 		}
 
 
-		if {$z_min > $z_top} {
+		# if {$z_min > $z_top} {
 			
-			if {$trans_flag == 0 } {
-				#puts "inside translocation if"
-				set t_thread $t
-				puts "$t_thread"
+		# 	if {$trans_flag == 0 } {
+		# 		#puts "inside translocation if"
+		# 		set t_thread $t
+		# 		puts "$t_thread"
 
-				set rg_calc_trans [analyze rg 0 1 $N]
+		# 		set rg_calc_trans [analyze rg 0 1 $N]
 
-				set trans_flag [expr $trans_flag + 1 ]
-			}
-		}
+		# 		set trans_flag [expr $trans_flag + 1 ]
+		# 	}
+		# }
 
 		if {($z_min > [lindex [part [expr $N+4] print pos] 2]) || ($z_max < $z_line)} {
 			puts "zmin > ztop"
