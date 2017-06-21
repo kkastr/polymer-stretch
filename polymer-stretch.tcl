@@ -233,7 +233,7 @@ while {$flag == 0} {
 		}
 
 
-		if {$z_min < $z_line} {
+		if {$z_min > $z_top} {
 			
 			if {$trans_flag == 0 } {
 				#puts "inside translocation if"
