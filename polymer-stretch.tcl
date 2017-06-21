@@ -219,10 +219,6 @@ while {$flag == 0} {
 		set z_max [::tcl::mathfunc::max {*}$z_list]
 
 
-		if {$z_min > [lindex [part [expr $N+4] print pos] 2] } {
-			puts "here"
-			break
-		}
 		if {$z_min < $z_line} {
 			
 			if {$trans_flag == 0 } {
@@ -235,9 +231,23 @@ while {$flag == 0} {
 				set trans_flag [expr $trans_flag + 1 ]
 			}
 		}
-		#puts $z_max
-		if {$z_max < $z_line} {
-			puts "zmax less than zline"
+
+
+		if {$z_min < $z_line} {
+			
+			if {$trans_flag == 0 } {
+				#puts "inside translocation if"
+				set t_thread $t
+				puts "$t_thread"
+
+				set rg_calc_trans [analyze rg 0 1 $N]
+
+				set trans_flag [expr $trans_flag + 1 ]
+			}
+		}
+
+		if {($z_min > [lindex [part [expr $N+4] print pos] 2]) || ($z_max < $z_line)} {
+			puts "zmin > ztop"
 			set t_last_thread $t
 			puts $t_last_thread
 			set t_trans [expr $t_last_thread - $t_thread]
@@ -247,8 +257,22 @@ while {$flag == 0} {
 			set n [expr $n + 1.0]
 			set trans_flag 0
 			break
-
 		}
+
+		#puts $z_max
+		# if {$z_max < $z_line} {
+		# 	puts "zmax less than zline"
+		# 	set t_last_thread $t
+		# 	puts $t_last_thread
+		# 	set t_trans [expr $t_last_thread - $t_thread]
+		# 	set trans_time [open "data/${filename}_$N/trans_time_$N-$rseed.dat" "a"]
+		# 	puts $trans_time "$t_trans $N $t_last_thread $t_thread"
+		# 	close $trans_time
+		# 	set n [expr $n + 1.0]
+		# 	set trans_flag 0
+		# 	break
+
+		# }
 		if {$t_trans != 0} {
 			set t_trans 0 
 		}
