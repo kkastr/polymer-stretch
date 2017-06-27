@@ -225,6 +225,12 @@ while {$flag == 0} {
 		set z_max [::tcl::mathfunc::max {*}$z_list]
 
 
+		if {$z_min > ([expr $cz + 2])} {
+			puts "retraction"
+			set position_flag 1
+			break
+		}
+
 		if {($z_min < $z_line)} {
 			
 			if {$trans_flag == 0 } {
