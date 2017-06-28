@@ -51,7 +51,7 @@ inter 1 0 lennard-jones $eps $sigma $lj_cutoff $lj_shift $lj_offset
 set t_trans 0
 set trans_flag 0
 set fixed_N [expr $N/2]
-set equil_time [expr 10.0 * $N]
+set equil_time [expr 100.0 * $N]
 set t_pore 1
 set z_line [expr $cz - $t_pore/2]
 set force [expr -4.3]
@@ -162,7 +162,6 @@ while {$flag == 0} {
 		set z_min [::tcl::mathfunc::min {*}$z_list]
 		set z_max [::tcl::mathfunc::max {*}$z_list]
 
-
 		if {$z_max < [lindex [part [expr $N+4] print pos] 2] } {
 			break
 		}
@@ -225,7 +224,14 @@ while {$flag == 0} {
 		set z_max [::tcl::mathfunc::max {*}$z_list]
 
 
-		if {($z_min < $z_line)} {
+		if {($z_min > ([expr $cz + 2])) && ($z_max < ($cz + 2.0 * ($lcav + 0.5) + $lsens+0.5 + $lfilt+0.5 + $mporezfilt - 2 ) )} {
+			puts "retraction"
+			set position_flag 1
+			break
+		}
+
+
+		if {($z_min < $z_line) || ($z_max > $z_top)} {
 			
 			if {$trans_flag == 0 } {
 				#puts "inside translocation if"
@@ -239,18 +245,18 @@ while {$flag == 0} {
 		}
 
 
-		if {$z_min > $z_top} {
+		# if {$z_max > $z_top} {
 			
-			if {$trans_flag == 0 } {
-				#puts "inside translocation if"
-				set t_thread $t
-				puts "$t_thread"
+		# 	if {$trans_flag == 0 } {
+		# 		#puts "inside translocation if"
+		# 		set t_thread $t
+		# 		puts "$t_thread"
 
-				set rg_calc_trans [analyze rg 0 1 $N]
+		# 		set rg_calc_trans [analyze rg 0 1 $N]
 
-				set trans_flag [expr $trans_flag + 1 ]
-			}
-		}
+		# 		set trans_flag [expr $trans_flag + 1 ]
+		# 	}
+		# }
 
 		if {($z_min > [lindex [part [expr $N+4] print pos] 2]) || ($z_max < $z_line)} {
 			puts "translocating"
