@@ -195,7 +195,11 @@ while {$flag == 0} {
 
 	
 	#puts "I'm back in the first while
+	set ntrans 0
+	set mntrans 0
 
+	set monomers [open "data/${filename}_$N/monomers_$N-$rseed.dat" "a"]
+	
 
 	while {1} {
 		
@@ -218,6 +222,13 @@ while {$flag == 0} {
 			#puts $r0
 			lappend z_list $z
 			lappend r_list $r
+			if {$z < $z_line} {
+				set ntrans [expr $ntrans + 1] 
+			} elseif { $z > $z_top} {
+				set mntrans [expr $mntrans + 1]
+			}
+			puts $monomers "$ntrans $mntrans"
+			
 			#puts "hi, I'm getting particle positions"
 		}
 		set z_min [::tcl::mathfunc::min {*}$z_list]
@@ -227,6 +238,7 @@ while {$flag == 0} {
 		if {($z_min > ([expr $cz + 2])) && ($z_max < ($cz + 2.0 * ($lcav + 0.5) + $lsens+0.5 + $lfilt+0.5 + $mporezfilt - 2 ) )} {
 			puts "retraction"
 			set position_flag 1
+			set trans_flag 0
 			break
 		}
 
@@ -295,5 +307,6 @@ while {$flag == 0} {
 		
 		incr t
 	}
+	close $monomers
 }
 
