@@ -120,7 +120,7 @@ set n 0
 set fail 0
 set success 0
 set trans_flag 0
-
+set n_attempt 0 
 
 set position_flag 0
 while {$flag == 0} {
@@ -249,6 +249,13 @@ while {$flag == 0} {
 				#puts "inside translocation if"
 				set t_thread $t
 				puts "$t_thread"
+				if { $n_attempt == 0 } {
+					puts "n_attempt $n_attempt"
+					set t_first_thread $t
+				
+				     
+					set n_attempt [expr $n_attempt + 1.0]
+				}
 
 				set rg_calc_trans [analyze rg 0 1 $N]
 
@@ -280,6 +287,7 @@ while {$flag == 0} {
 			close $trans_time
 			set n [expr $n + 1.0]
 			set trans_flag 0
+			set n_attempt 0
 			set position_flag 1
 			break
 		}
