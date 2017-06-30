@@ -202,7 +202,7 @@ while {$flag == 0} {
 	
 
 	while {1} {
-		
+		set 
 		for {set i 0} {$i < $N} {incr i} {
 			part $i ext_force $force 1.8 1.8
 		}
@@ -213,6 +213,8 @@ while {$flag == 0} {
 			set flag 1
 			break
 		}
+		set ntrans 0
+		set mntrans 0
 
 		for {set i 0} { $i < $N } {incr i} {
 			set x [lindex [part $i print pos] 0]
@@ -227,10 +229,10 @@ while {$flag == 0} {
 			} elseif { $z > $z_top} {
 				set mntrans [expr $mntrans + 1]
 			}
-			puts $monomers "$ntrans $mntrans"
 			
 			#puts "hi, I'm getting particle positions"
 		}
+		puts $monomers "$ntrans $mntrans"
 		set z_min [::tcl::mathfunc::min {*}$z_list]
 		set z_max [::tcl::mathfunc::max {*}$z_list]
 
