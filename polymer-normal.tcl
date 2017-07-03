@@ -51,7 +51,7 @@ inter 1 0 lennard-jones $eps $sigma $lj_cutoff $lj_shift $lj_offset
 set t_trans 0
 set trans_flag 0
 set fixed_N [expr $N/2]
-set equil_time [expr 10.0 * $N]
+set equil_time [expr 10]
 set t_pore 1
 set z_line [expr $cz - $t_pore/2]
 set force [expr -4.3]
@@ -86,10 +86,10 @@ constraint pore center [expr $cx] [expr $cy] [expr $cz + 2.0 * ($lcav + 0.5) + $
 
 
 for { set i 0 } { $i < $N } { incr i } {
-	set x [expr $cx - $N/2 + $i]
+	#set x [expr $cx - $N/2 + $i]
 	set x [expr $cx]
 	set y [expr $cy]
-	set z [expr $cz  + 0.97*$i]
+	set z [expr $cz  + 0.97*$i - 1]
 	# set x [expr $cx - $N/2 + $i]
 	# set y [expr $cy]
 	# set z [expr $cz + 15]	
@@ -131,7 +131,7 @@ while {$flag == 0} {
 		for { set i 0 } { $i < $N } { incr i } {
 			set x [expr $cx]
 			set y [expr $cy]
-			set z [expr $cz  + 0.97*$i]
+			set z [expr $cz  + 0.97*$i - 1]
 
 			# set x [expr $cx - $N/2 + $i]
 			# set y [expr $cy]
@@ -173,7 +173,7 @@ while {$flag == 0} {
 	# thermostat langevin $temp $gamma
 
 
-	#part $fixed_N unfix
+	part $fixed_N unfix
 
 	puts "equilibrated."
 
@@ -228,6 +228,7 @@ while {$flag == 0} {
 		if {$z_min > ([expr $cz + 2])} {
 			puts "retraction"
 			set position_flag 1
+			set trans_flag 0
 			break
 		}
 
