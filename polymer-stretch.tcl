@@ -51,7 +51,7 @@ inter 1 0 lennard-jones $eps $sigma $lj_cutoff $lj_shift $lj_offset
 set t_trans 0
 set trans_flag 0
 set fixed_N [expr $N/2]
-set equil_time [expr 200.0 * $N]
+set equil_time [expr  $N]
 set t_pore 1
 set z_line [expr $cz - $t_pore/2]
 set force [expr -4.3]
@@ -202,7 +202,7 @@ while {$flag == 0} {
 	
 
 	while {1} {
-		set 
+	
 		for {set i 0} {$i < $N} {incr i} {
 			part $i ext_force $force 1.8 1.8
 		}
