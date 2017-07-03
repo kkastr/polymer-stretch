@@ -17,7 +17,7 @@ set cy [expr $boxy/10.0]
 set cz [expr $boxz/10.0]
 set tmax 10000
 set nmax 10
-set temp 1.0 ; set gamma 1.0; set gamma_equilibration 0.1
+set temp 1.0 ; set gamma 1.0; set gamma_equilibration 0.01
 
 
 setmd box_l $boxx $boxy $boxz
@@ -51,7 +51,7 @@ inter 1 0 lennard-jones $eps $sigma $lj_cutoff $lj_shift $lj_offset
 set t_trans 0
 set trans_flag 0
 set fixed_N [expr $N/2]
-set equil_time [expr 10.0 * $N]
+set equil_time [expr 250.0 * $N]
 set t_pore 1
 set z_line [expr $cz - $t_pore/2]
 set force [expr -4.3]
@@ -76,24 +76,24 @@ part [expr $N+3] pos $cx $cy [expr $cz + $lcav+0.5 + $lsens+0.5 + $mporezfilt] t
 part [expr $N+4] pos $cx $cy [expr $cz + 2.0 * ($lcav + 0.5) + $lsens+0.5 + $lfilt+0.5 + $mporezfilt] type 99 fix
 
 constraint pore center [expr $cx] [expr $cy] [expr $cz] axis 0 0 1 radius $rsens length $rsens type 1
-constraint pore center [expr $cx] [expr $cy] [expr $cz + $lcav+0.5 + $lsens+0.5] axis 0 0 1 radius $rcav length $lcav type 1
+#constraint pore center [expr $cx] [expr $cy] [expr $cz + $lcav+0.5 + $lsens+0.5] axis 0 0 1 radius $rcav length $lcav type 1
 #constraint pore center [expr $cx] [expr $cy] [expr $cz + 2.0 * ($lcav + 0.5) + $lsens+0.5 + $lfilt+0.5] axis 0 0 1 radius $rfilt length $lfilt type 1
 #constraint pore center [expr $cx] [expr $cy] [expr $cz + $lcav+0.5 + $lsens+0.5 + $mporezfilt] axis 0 0 1 radius $rcav length $lcav type 1
 #constraint pore center [expr $cx] [expr $cy] [expr $cz + 2.0 * ($lcav + 0.5) + $lsens+0.5 + $lfilt+0.5 + $mporezfilt] axis 0 0 1 radius $rsens length $lsens type 1
 
 
 
-
+#puts [expr $cz + 2.0 * ($lcav + 0.5) + $lsens+0.5 + $lfilt+0.5 + $mporezfilt]
 
 for { set i 0 } { $i < $N } { incr i } {
-	set x [expr $cx - $N/2 + $i]
+	#set x [expr $cx - $N/2 + $i]
 	set x [expr $cx]
 	set y [expr $cy]
 	set z [expr $cz  + 0.97*$i]
 	# set x [expr $cx - $N/2 + $i]
-	# set y [expr $cy]
-	# set z [expr $cz + 15]	
-	part $i pos $x $y $z type 0 
+	#set y [expr $cy]
+	#set z [expr $cz]	
+	part $i pos $x $y $z type 0
 
 
 	if { $i > 0 } {
@@ -191,7 +191,7 @@ while {$flag == 0} {
 	#part [expr $N-1] unfix
 	puts "unfixed"
 
-	#puts "[lindex [part [expr $N+4] print pos] 2]"
+	# #puts "[lindex [part [expr $N+4] print pos] 2]"
 	part 0 unfix
 
 	
@@ -228,6 +228,7 @@ while {$flag == 0} {
 		if {$z_min > ([expr $cz + 2])} {
 			puts "retraction"
 			set position_flag 1
+			set trans_flag 0
 			break
 		}
 
@@ -245,18 +246,18 @@ while {$flag == 0} {
 		}
 
 
-		if {$z_min > $z_top} {
+		# if {$z_min > $z_top} {
 			
-			if {$trans_flag == 0 } {
-				#puts "inside translocation if"
-				set t_thread $t
-				puts "$t_thread"
+		# 	if {$trans_flag == 0 } {
+		# 		#puts "inside translocation if"
+		# 		set t_thread $t
+		# 		puts "$t_thread"
 
-				set rg_calc_trans [analyze rg 0 1 $N]
+		# 		set rg_calc_trans [analyze rg 0 1 $N]
 
-				set trans_flag [expr $trans_flag + 1 ]
-			}
-		}
+		# 		set trans_flag [expr $trans_flag + 1 ]
+		# 	}
+		# }
 
 		if {($z_min > [lindex [part [expr $N+4] print pos] 2]) || ($z_max < $z_line)} {
 			puts "translocating"
