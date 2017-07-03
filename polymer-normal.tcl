@@ -173,11 +173,11 @@ while {$flag == 0} {
 	# thermostat langevin $temp $gamma
 
 
-	part $fixed_N unfix
+	#part $fixed_N unfix
 
 	puts "equilibrated."
 
-	#part [expr $N-1] fix
+	part [expr $N-1] fix
 	puts "fixed"
 	thermostat langevin $temp $gamma_equilibration
 
@@ -188,7 +188,7 @@ while {$flag == 0} {
 	}
 	thermostat langevin $temp $gamma
 
-	#part [expr $N-1] unfix
+	part [expr $N-1] unfix
 	puts "unfixed"
 
 	#puts "[lindex [part [expr $N+4] print pos] 2]"

@@ -51,7 +51,7 @@ inter 1 0 lennard-jones $eps $sigma $lj_cutoff $lj_shift $lj_offset
 set t_trans 0
 set trans_flag 0
 set fixed_N [expr $N/2]
-set equil_time [expr  $N]
+set equil_time [expr 200 * $N]
 set t_pore 1
 set z_line [expr $cz - $t_pore/2]
 set force [expr -4.3]
