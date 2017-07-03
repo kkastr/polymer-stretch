@@ -17,7 +17,7 @@ set cy [expr $boxy/10.0]
 set cz [expr $boxz/10.0]
 set tmax 10000
 set nmax 10
-set temp 1.0 ; set gamma 1.0; set gamma_equilibration 0.01
+set temp 1.0 ; set gamma 1.0; set gamma_equilibration 0.1
 
 
 setmd box_l $boxx $boxy $boxz
@@ -47,7 +47,6 @@ inter 0 fene $k_fene $r_fene
 inter 1 angle $k_angle $pi
 inter 0 0 lennard-jones $eps $sigma $lj_cutoff $lj_shift $lj_offset
 inter 1 0 lennard-jones $eps $sigma $lj_cutoff $lj_shift $lj_offset
-
 set t_trans 0
 set trans_flag 0
 set fixed_N [expr $N/2]
