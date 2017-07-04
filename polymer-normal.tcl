@@ -89,11 +89,11 @@ for { set i 0 } { $i < $N } { incr i } {
 	#set x [expr $cx - $N/2 + $i]
 	set x [expr $cx]
 	set y [expr $cy]
-	set z [expr $cz  + 0.97*$i - 1]
+	set z [expr $cz  + 0.97*$i - 3]
 	# set x [expr $cx - $N/2 + $i]
 	# set y [expr $cy]
 	# set z [expr $cz + 15]	
-	part $i pos $x $y $z type 0 
+	part $i pos $x $y $z type 0 fix 1 1 0
 
 
 	if { $i > 0 } {
@@ -131,12 +131,12 @@ while {$flag == 0} {
 		for { set i 0 } { $i < $N } { incr i } {
 			set x [expr $cx]
 			set y [expr $cy]
-			set z [expr $cz  + 0.97*$i - 1]
+			set z [expr $cz  + 0.97*$i - 3]
 
 			# set x [expr $cx - $N/2 + $i]
 			# set y [expr $cy]
 			# set z [expr $cz + 15]
-			part $i pos $x $y $z ext_force 0 0 0
+			part $i pos $x $y $z ext_force 0 0 0 fix 1 1 0
 		}
 		set position_flag 0
 	}
@@ -177,7 +177,7 @@ while {$flag == 0} {
 
 	puts "equilibrated."
 
-	part [expr $N-1] fix
+	#part [expr $N-1] fix
 	puts "fixed"
 	thermostat langevin $temp $gamma_equilibration
 
@@ -188,7 +188,7 @@ while {$flag == 0} {
 	}
 	thermostat langevin $temp $gamma
 
-	part [expr $N-1] unfix
+	#part [expr $N-1] unfix
 	puts "unfixed"
 
 	#puts "[lindex [part [expr $N+4] print pos] 2]"
