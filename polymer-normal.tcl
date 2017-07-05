@@ -88,7 +88,7 @@ for { set i 0 } { $i < $N } { incr i } {
 	#set x [expr $cx - $N/2 + $i]
 	set x [expr $cx]
 	set y [expr $cy]
-	set z [expr $cz  + 0.97*$i]
+	set z [expr $cz  + 0.97*$i -3 ]
 	# set x [expr $cx - $N/2 + $i]
 	# set y [expr $cy]
 	# set z [expr $cz + 85]	
@@ -130,7 +130,7 @@ while {$flag == 0} {
 		for { set i 0 } { $i < $N } { incr i } {
 			set x [expr $cx]
 			set y [expr $cy]
-			set z [expr $cz  + 0.97*$i]
+			set z [expr $cz  + 0.97*$i - 3]
 
 			# set x [expr $cx - $N/2 + $i]
 			# set y [expr $cy]
