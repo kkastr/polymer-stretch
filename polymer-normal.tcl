@@ -224,9 +224,9 @@ while {$flag == 0} {
 
 
 		if {$t%10} {
-			set xlast [lindex [part [expr $N - 1] print pos] 0]
-			set ylast [lindex [part [expr $N - 1] print pos] 1]
-			set zlast [lindex [part [expr $N - 1] print pos] 2]
+			set xlast [expr [lindex [part [expr $N - 1] print pos] 0] - $cx]
+			set ylast [expr [lindex [part [expr $N - 1] print pos] 1] - $cy]
+			set zlast [expr [lindex [part [expr $N - 1] print pos] 2] - $cz]
 			puts $last_monomer_position "$xlast $ylast $zlast $ntrans"
 		}
 
