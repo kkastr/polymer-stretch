@@ -17,7 +17,7 @@ set cy [expr $boxy/2.0]
 set cz [expr $boxz/2.0]
 set tmax 10000
 set nmax 10
-set temp 1.0 ; set gamma 1.0; set gamma_equilibration 0.1
+set temp 0.0 ; set gamma 1.0; set gamma_equilibration 0.1
 
 
 setmd box_l $boxx $boxy $boxz
@@ -85,13 +85,13 @@ constraint pore center [expr $cx] [expr $cy] [expr $cz] axis 0 0 1 radius $rsens
 #puts [expr $cz + 2.0 * ($lcav + 0.5) + $lsens+0.5 + $lfilt+0.5 + $mporezfilt]
 
 for { set i 0 } { $i < $N } { incr i } {
-	#set x [expr $cx - $N/2 + $i]
+	
 	set x [expr $cx]
 	set y [expr $cy]
 	set z [expr $cz  + 0.97*$i]
 	# set x [expr $cx - $N/2 + $i]
 	# set y [expr $cy]
-	# set z [expr $cz + 85]	
+	# set z [expr $cz + 15]	
 	part $i pos $x $y $z type 0
 
 
@@ -124,7 +124,7 @@ set trans_flag 0
 set position_flag 0
 while {$flag == 0} {
 	#puts "debug while"
-	part 0 fix
+
 	if {$position_flag == 1} {
 		puts "here"
 		for { set i 0 } { $i < $N } { incr i } {
@@ -134,7 +134,7 @@ while {$flag == 0} {
 
 			# set x [expr $cx - $N/2 + $i]
 			# set y [expr $cy]
-			# set z [expr $cz + 85]
+			# set z [expr $cz + 15]
 			part $i pos $x $y $z ext_force 0 0 0
 		}
 		set position_flag 0
@@ -144,6 +144,8 @@ while {$flag == 0} {
 
 	# #part [expr $N-1] fix
 	# puts "fixed"
+
+	part 0 fix
 	thermostat langevin $temp $gamma_equilibration
 
 	for {set i 0} {$i < $equil_time} {incr i} {
@@ -152,16 +154,15 @@ while {$flag == 0} {
 	    imd positions
 	}
 	thermostat langevin $temp $gamma
-
+	part 0 unfix
+	
 	# #part [expr $N-1] unfix
 	# puts "unfixed"
 
-	# #puts "[lindex [part [expr $N+4] print pos] 2]"
-	part 0 unfix
-
 	#puts "I'm back in the first while
 	set monomers [open "data/${filename}_$N/monomers_$N-$rseed.dat" "a"]
-	
+	set last_monomer_position [open "data/${filename}_$N/last_monomer_$N-$rseed.dat" "a"]
+
 
 	while {1} {
 		
@@ -221,6 +222,15 @@ while {$flag == 0} {
 			}
 		}
 
+		
+		if {$t%10} {
+			set xlast [lindex [part [expr $N - 1] print pos] 0]
+			set ylast [lindex [part [expr $N - 1] print pos] 1]
+			set zlast [lindex [part [expr $N - 1] print pos] 2]
+			puts $last_monomer_position "$xlast $ylast $zlast $ntrans"
+		}	
+
+
 
 		if {($z_max < $z_line)} {
 			puts "translocating"
@@ -236,6 +246,8 @@ while {$flag == 0} {
 			set re_at_trans [open "data/${filename}_$N/re_at_trans_$N-$rseed.dat" "a"]
 			puts $re_at_trans "$re_calc_trans"
 			close $re_at_trans
+			puts "$ntrans $mtrans"
+			puts $monomers "$ntrans $mtrans"
 			set n [expr $n + 1.0]
 			set trans_flag 0
 			set position_flag 1
@@ -252,5 +264,6 @@ while {$flag == 0} {
 		incr t
 	}
 	close $monomers
+	close $last_monomer_position
 }
 

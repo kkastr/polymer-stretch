@@ -161,6 +161,7 @@ while {$flag == 0} {
 
 	#puts "I'm back in the first while
 	set monomers [open "data/${filename}_$N/monomers_$N-$rseed.dat" "a"]
+	set last_monomer_position [open "data/${filename}_$N/last_monomer_$N-$rseed.dat" "a"]
 	
 
 	while {1} {
@@ -222,6 +223,13 @@ while {$flag == 0} {
 		}
 
 
+		if {$t%10} {
+			set xlast [lindex [part [expr $N - 1] print pos] 0]
+			set ylast [lindex [part [expr $N - 1] print pos] 1]
+			set zlast [lindex [part [expr $N - 1] print pos] 2]
+			puts $last_monomer_position "$xlast $ylast $zlast $ntrans"
+		}
+
 		if {($z_max < $z_line)} {
 			puts "translocating"
 			set t_last_thread $t
@@ -252,5 +260,6 @@ while {$flag == 0} {
 		incr t
 	}
 	close $monomers
+	close $last_monomer_position
 }
 
