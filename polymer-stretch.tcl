@@ -214,7 +214,9 @@ while {$flag == 0} {
 			break
 		}
 		set ntrans 0
-		set mntrans 0
+		set mtrans 0
+		set ntrans_list {}
+		set mtrans_list {}
 
 		for {set i 0} { $i < $N } {incr i} {
 			set x [lindex [part $i print pos] 0]
@@ -227,12 +229,12 @@ while {$flag == 0} {
 			if {$z < $z_line} {
 				set ntrans [expr $ntrans + 1] 
 			} elseif { $z > $z_top} {
-				set mntrans [expr $mntrans + 1]
+				set mtrans [expr $mtrans + 1]
 			}
 			
 			#puts "hi, I'm getting particle positions"
 		}
-		puts $monomers "$ntrans $mntrans"
+
 		set z_min [::tcl::mathfunc::min {*}$z_list]
 		set z_max [::tcl::mathfunc::max {*}$z_list]
 
@@ -260,33 +262,29 @@ while {$flag == 0} {
 				}
 
 				set rg_calc_trans [analyze rg 0 1 $N]
+				set re_calc_trans [analyze re 0 1 $N]
 
 				set trans_flag [expr $trans_flag + 1 ]
 			}
 		}
 
 
-		# if {$z_max > $z_top} {
-			
-		# 	if {$trans_flag == 0 } {
-		# 		#puts "inside translocation if"
-		# 		set t_thread $t
-		# 		puts "$t_thread"
-
-		# 		set rg_calc_trans [analyze rg 0 1 $N]
-
-		# 		set trans_flag [expr $trans_flag + 1 ]
-		# 	}
-		# }
-
 		if {($z_min > [lindex [part [expr $N+4] print pos] 2]) || ($z_max < $z_line)} {
-			puts "translocating"
+			puts "translocated"
 			set t_last_thread $t
 			puts $t_last_thread
 			set t_trans [expr $t_last_thread - $t_thread]
 			set trans_time [open "data/${filename}_$N/trans_time_$N-$rseed.dat" "a"]
 			puts $trans_time "$t_trans $N $t_last_thread $t_thread"
 			close $trans_time
+			set rg_at_trans [open "data/${filename}_$N/rg_at_trans_$N-$rseed.dat" "a"]
+			puts $rg_at_trans "$rg_calc_trans"
+			close $rg_at_trans
+			set re_at_trans [open "data/${filename}_$N/re_at_trans_$N-$rseed.dat" "a"]
+			puts $re_at_trans "$re_calc_trans"
+			close $re_at_trans
+			puts "$ntrans $mtrans"
+			puts $monomers "$ntrans $mtrans"
 			set n [expr $n + 1.0]
 			set trans_flag 0
 			set n_attempt 0
@@ -294,20 +292,6 @@ while {$flag == 0} {
 			break
 		}
 
-		#puts $z_max
-		# if {$z_max < $z_line} {
-		# 	puts "zmax less than zline"
-		# 	set t_last_thread $t
-		# 	puts $t_last_thread
-		# 	set t_trans [expr $t_last_thread - $t_thread]
-		# 	set trans_time [open "data/${filename}_$N/trans_time_$N-$rseed.dat" "a"]
-		# 	puts $trans_time "$t_trans $N $t_last_thread $t_thread"
-		# 	close $trans_time
-		# 	set n [expr $n + 1.0]
-		# 	set trans_flag 0
-		# 	break
-
-		# }
 		if {$t_trans != 0} {
 			set t_trans 0 
 			
